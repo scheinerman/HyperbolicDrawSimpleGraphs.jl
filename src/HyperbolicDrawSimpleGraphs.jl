@@ -3,12 +3,17 @@ module HyperbolicDrawSimpleGraphs
 
 using SimpleGraphs, HyperbolicPlane, SimpleDrawing
 
+import Base: show
 
 export HyperbolicGraphEmbedding, hdraw, hembed
 
 mutable struct HyperbolicGraphEmbedding
     G::SimpleGraph
     locs::Dict{Any,HPoint}
+end
+
+function show(io::IO, X::HyperbolicGraphEmbedding)
+    print(io, "Hyperbolic embedding of $(X.G)")
 end
 
 function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
@@ -26,12 +31,31 @@ function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
     return HyperbolicGraphEmbedding(GG,d)
 end
 
+function h_random(G::SimpleGraph)::HyperbolicGraphEmbedding
+    d = Dict{Any,HPoint}()
+    for v in G.V
+        d[v] = RandomHPoint()
+    end
+    return HyperbolicGraphEmbedding(G,d)
+end
+
 """
-`hembed(G)` embeds `G` in the hyperbolic plane by placing vertices
+`hembed(G,method)` embeds `G` in the hyperbolic plane by placing vertices
 around a circle.
+
+Options for `method`:
++ `:circular` places vertices around a circle
++ `:random` places vertices at random
 """
-function hembed(G::SimpleGraph)
-    X = h_circular(G)
+function hembed(G::SimpleGraph, method::Symbol = :circular)
+
+    if method == :circular
+        X = h_circular(G)
+    elseif method == :random
+        X = h_random(G)
+    else
+        error("Unknown method $method")
+    end
     cache_save(G,:HyperbolicGraphEmbedding,X)
 end
 
@@ -44,6 +68,7 @@ function hdraw(G::SimpleGraph)
         hembed(G)
     end
     X = cache_recall(G,:HyperbolicGraphEmbedding)
+    newdraw()
     for e in G.E
         u,v = e
         A = X.locs[u]
@@ -52,9 +77,12 @@ function hdraw(G::SimpleGraph)
     end
     for v in G.V
         A = X.locs[v]
+        A = HPoint(A)
+        set_radius(A,2)
         draw(A)
     end
+    draw(HPlane())
     finish()
 end
 
-end
+end  # end of module
