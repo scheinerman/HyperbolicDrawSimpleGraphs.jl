@@ -23,7 +23,7 @@ function convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
     loc = collect(getxy(GG))
     d = Dict{Any,HPoint}()
     for i = 1:n
-        l = collect(loc[i])
+        l = collect(loc[i][2])
         v = VV[i]
         r = sqrt(l[1]*l[1] + l[2]*l[2])
         angs = angle(Complex(l[1],l[2]))
