@@ -47,7 +47,9 @@ function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
         d[v] = P
     end
 
-    return HyperbolicGraphEmbedding(GG,d)
+    X = HyperbolicGraphEmbedding(GG,d)
+    cache_save(G,:HyperbolicGraphEmbedding,X)
+
 end
 
 function h_random(G::SimpleGraph)::HyperbolicGraphEmbedding
