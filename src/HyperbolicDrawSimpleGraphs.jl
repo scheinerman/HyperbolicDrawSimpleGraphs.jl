@@ -48,7 +48,7 @@ function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
     end
 
     X = HyperbolicGraphEmbedding(GG,d)
-    cache_save(G,:HyperbolicGraphEmbedding,X)
+    cache_save(GG,:HyperbolicGraphEmbedding,X)
 
 end
 
