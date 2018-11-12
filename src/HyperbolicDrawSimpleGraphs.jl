@@ -16,8 +16,8 @@ function show(io::IO, X::HyperbolicGraphEmbedding)
     print(io, "Hyperbolic embedding of $(X.G)")
 end
 
-# convert embedded SimpleGraph to Hyperbolic embedding
-function convertEmbed(GG::SimpleGraph)::HyperbolicGraphEmbedding
+# convert SimpleGraph to Hyperbolic embedding
+function convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
     n = NV(GG)
     VV = vlist(GG)
     loc = getxy(GG)
@@ -30,8 +30,7 @@ function convertEmbed(GG::SimpleGraph)::HyperbolicGraphEmbedding
         P = HPoint(r,angs)
         d[v] = P
     end
-    X = HyperbolicGraphEmbedding(GG,d)
-    cache_save(GG,:HyperbolicGraphEmbedding,X)
+    return HyperbolicGraphEmbedding(GG,d)
 end
 
 
@@ -77,6 +76,12 @@ function hembed(G::SimpleGraph, method::Symbol = :circular)
     else
         error("Unknown method $method")
     end
+    cache_save(G,:HyperbolicGraphEmbedding,X)
+end
+
+#graphs already embedded in SimpleGraphs, conversion to hyperbolic drawing
+function convertEmbed(G::SimpleGraph)
+    X = convert(G)
     cache_save(G,:HyperbolicGraphEmbedding,X)
 end
 
