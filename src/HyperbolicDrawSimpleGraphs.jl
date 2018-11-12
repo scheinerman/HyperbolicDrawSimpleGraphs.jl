@@ -20,10 +20,10 @@ end
 function convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
     n = NV(GG)
     VV = vlist(GG)
-    loc = getxy(GG)
+    loc = collect(getxy(GG))
     d = Dict{Any,HPoint}()
     for i = 1:n
-        l = loc[i]
+        l = collect(loc[i])
         v = VV[i]
         r = sqrt(l[1]*l[1] + l[2]*l[2])
         angs = angle(Complex(l[1],l[2]))
