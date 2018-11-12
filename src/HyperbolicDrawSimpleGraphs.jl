@@ -17,7 +17,7 @@ function show(io::IO, X::HyperbolicGraphEmbedding)
 end
 
 # convert embedded SimpleGraph to Hyperbolic embedding
-function convertEmbed(GG::SimpleGraph)
+function convertEmbed(GG::SimpleGraph)::HyperbolicGraphEmbedding
     n = NV(GG)
     VV = vlist(GG)
     loc = getxy(GG)
@@ -30,7 +30,8 @@ function convertEmbed(GG::SimpleGraph)
         P = HPoint(r,angs)
         d[v] = P
     end
-    return HyperbolicGraphEmbedding(GG,d)
+    X = HyperbolicGraphEmbedding(GG,d)
+    cache_save(GG,:HyperbolicGraphEmbedding,X)
 end
 
 
@@ -47,8 +48,7 @@ function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
         d[v] = P
     end
 
-    X = HyperbolicGraphEmbedding(GG,d)
-    cache_save(GG,:HyperbolicGraphEmbedding,X)
+    return HyperbolicGraphEmbedding(GG,d)
 
 end
 
