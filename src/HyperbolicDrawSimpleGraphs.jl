@@ -21,7 +21,7 @@ function convertEmbed(GG::SimpleGraph)
     n = NV(GG)
     VV = vlist(GG)
     loc = getxy(GG)
-    d = Dic{Any,HPoint}()
+    d = Dict{Any,HPoint}()
     for i = 1:n
         l = loc[i]
         v = VV[i]
