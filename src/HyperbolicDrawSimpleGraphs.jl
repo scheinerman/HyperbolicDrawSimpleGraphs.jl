@@ -5,7 +5,7 @@ using SimpleGraphs, HyperbolicPlane, SimpleDrawing
 
 import Base: show
 
-export HyperbolicGraphEmbedding, hdraw, hembed
+export HyperbolicGraphEmbedding, hdraw, hembed, convertEmbed
 
 mutable struct HyperbolicGraphEmbedding
     G::SimpleGraph
@@ -34,7 +34,6 @@ function convertEmbed(GG::SimpleGraph)
 end
 
 
-end
 
 function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
     n = NV(GG)
