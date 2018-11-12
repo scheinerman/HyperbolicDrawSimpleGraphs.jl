@@ -25,8 +25,8 @@ function convertEmbed(GG::SimpleGraph)
     for i = 1:n
         l = loc[i]
         v = VV[i]
-        r = sqrt(v[1]*v[1] + v[2]*v[2])
-        angs = angle(v)
+        r = sqrt(l[1]*l[1] + l[2]*l[2])
+        angs = angle(l)
         P = HPoint(r,angs)
         d[v] = P
     end
