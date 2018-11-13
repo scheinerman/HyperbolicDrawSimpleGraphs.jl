@@ -4,8 +4,9 @@ module HyperbolicDrawSimpleGraphs
 using SimpleGraphs, HyperbolicPlane, SimpleDrawing
 
 import Base: show
+import HyperbolicPlane: polar
 
-export HyperbolicGraphEmbedding, hdraw, hembed, convertEmbed
+export HyperbolicGraphEmbedding, hdraw, hembed
 
 mutable struct HyperbolicGraphEmbedding
     G::SimpleGraph
@@ -16,20 +17,20 @@ function show(io::IO, X::HyperbolicGraphEmbedding)
     print(io, "Hyperbolic embedding of $(X.G)")
 end
 
+polar(x::Real,y::Real) = (sqrt(x*x+y*y), atan(x,y) )
+
 # convert SimpleGraph to Hyperbolic embedding
-function convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
-    n = NV(GG)
-    VV = vlist(GG)
-    loc = collect(getxy(GG))
+function h_convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
+    loc = getxy(GG)
     d = Dict{Any,HPoint}()
-    for i = 1:n
-        l = collect(loc[i][2])
-        v = VV[i]
-        r = sqrt(l[1]*l[1] + l[2]*l[2])
-        angs = angle(Complex(l[1],l[2]))
-        P = HPoint(r,angs)
+
+    for v in GG.V
+        xy = loc[v]
+        (r,theta) = polar(xy[1],xy[2])
+        P = HPoint(r,theta)
         d[v] = P
     end
+
     return HyperbolicGraphEmbedding(GG,d)
 end
 
@@ -66,6 +67,7 @@ around a circle.
 Options for `method`:
 + `:circular` places vertices around a circle
 + `:random` places vertices at random
++ `:convert` converts the Euclidean embedding of `G` into a hyperbolic embedding
 """
 function hembed(G::SimpleGraph, method::Symbol = :circular)
 
@@ -73,17 +75,19 @@ function hembed(G::SimpleGraph, method::Symbol = :circular)
         X = h_circular(G)
     elseif method == :random
         X = h_random(G)
+    elseif method == :convert
+        X = h_convert(G)
     else
         error("Unknown method $method")
     end
     cache_save(G,:HyperbolicGraphEmbedding,X)
 end
-
-#graphs already embedded in SimpleGraphs, conversion to hyperbolic drawing
-function convertEmbed(G::SimpleGraph)
-    X = convert(G)
-    cache_save(G,:HyperbolicGraphEmbedding,X)
-end
+#
+# #graphs already embedded in SimpleGraphs, conversion to hyperbolic drawing
+# function convertEmbed(G::SimpleGraph)
+#     X = _convert(G)
+#     cache_save(G,:HyperbolicGraphEmbedding,X)
+# end
 
 """
 `hdraw(G)` draws the graph `G` in its current hyperoblic embedding
