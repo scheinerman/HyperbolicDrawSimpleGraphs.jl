@@ -41,4 +41,4 @@ The `:convert` method for `hembed` does the following.
 + For each vertex `v` of the graph, get its `x,y`-coordinates from
 its Euclidean embedding.
 + Convert `x,y` to polar `(r,theta)`.
-+ Embed `v` in the hyperbolic plane the point `HPoint(r,theta)`.
++ Embed `v` in the hyperbolic plane at `HPoint(r,theta)`.
