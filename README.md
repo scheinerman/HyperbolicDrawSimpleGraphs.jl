@@ -33,7 +33,7 @@ julia> hdraw(G)
 ```
 produces this:
 
-![](hyper-4-cube.pdf)
+![](hyper-4-cube.png)
 
 ### Conversion from Euclidean Embedding 
 
