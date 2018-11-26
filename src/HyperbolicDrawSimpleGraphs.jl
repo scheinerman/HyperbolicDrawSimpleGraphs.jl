@@ -60,6 +60,48 @@ function h_random(G::SimpleGraph)::HyperbolicGraphEmbedding
     return HyperbolicGraphEmbedding(G,d)
 end
 
+function private_adj(G::SimpleGraph)
+    n = NV(G)
+    A = zeros(Int,n,n)
+    vv = vlist(G)
+    for i=1:n-1
+        u = vv[i]
+        for j=(i+1):n
+            w = vv[j]
+            if has(G,u,w)
+                A[i,j] = 1
+                A[j,i] = 1
+            end
+        end
+    end
+    return A,vv
+end
+
+include("myspring.jl")
+
+"""
+`spring!(X)` gives the graph held in `X` with a spring embedding
+(based on code in the `GraphLayout` module). If runs a default number of
+iterations (100) of that algorithm. To change the number of
+iterations, use `spring!(X,nits)`.
+"""
+function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
+    n = NV(G)
+    A,vv = private_adj(G)
+
+    x,y = h_layout_spring_adj(A,MAXITER=nits)
+
+    d = Dict{Any,HPoint}()
+    for i = 1:n
+        v = vv[i]
+        (r,theta) = polar(x[i],y[i])
+        P = HPoint(r,theta)
+        d[v] = P
+    end
+
+    return HyperbolicGraphEmbedding(G,d)
+end
+
 """
 `hembed(G,method)` embeds `G` in the hyperbolic plane by placing vertices
 around a circle.
@@ -77,6 +119,8 @@ function hembed(G::SimpleGraph, method::Symbol = :circular)
         X = h_random(G)
     elseif method == :convert
         X = h_convert(G)
+    elseif method == :spring
+        X = h_spring(G)
     else
         error("Unknown method $method")
     end
