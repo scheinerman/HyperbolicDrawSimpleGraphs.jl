@@ -47,7 +47,7 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
         for i = 1:N
             force_mag  = force[i]
             scale      = min(force_mag, TEMP)/force_mag
-            locs_r[i] += force_r[i] * scale
+            locs_r[i] += force[i] * scale
         end
     end
 
