@@ -84,13 +84,12 @@ function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     n = NV(G)
     A,vv = private_adj(G)
 
-    x,y = h_layout_spring_adj(A,MAXITER=nits)
+    locs_r, angs = h_layout_spring_adj(A,MAXITER=nits)
 
     d = Dict{Any,HPoint}()
     for i = 1:n
         v = vv[i]
-        (r,theta) = polar(x[i],y[i])
-        P = HPoint(r,theta)
+        P = HPoint(locs_r(i),angs(i))
         d[v] = P
     end
 

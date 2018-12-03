@@ -58,5 +58,5 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
     end
     locs_r = map(z -> scaler(z, min_r, max_r), locs_r)
 
-    return locs_r
+    return locs_r, angs
 end
