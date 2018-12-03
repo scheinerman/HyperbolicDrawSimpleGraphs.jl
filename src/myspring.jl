@@ -36,7 +36,7 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
                 #  / |          cos θ = d_x/d = fx/F
                 # /---          -> fx = F*d_x/d
                 # dx fx
-                d_theta = abs(angs(i) - angs(j))
+                d_theta = abs(angs[i] - angs[j])
                 force_vec += F_d*d * cos(d_theta)
 
             end
