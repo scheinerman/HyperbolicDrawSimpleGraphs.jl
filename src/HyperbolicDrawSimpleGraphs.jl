@@ -30,11 +30,8 @@ function h_convert(GG::SimpleGraph)::HyperbolicGraphEmbedding
         P = HPoint(r,theta)
         d[v] = P
     end
-
     return HyperbolicGraphEmbedding(GG,d)
 end
-
-
 
 function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
     n = NV(GG)
@@ -47,9 +44,7 @@ function h_circular(GG::SimpleGraph)::HyperbolicGraphEmbedding
         P = HPoint(r,angs[j])
         d[v] = P
     end
-
     return HyperbolicGraphEmbedding(GG,d)
-
 end
 
 function h_random(G::SimpleGraph)::HyperbolicGraphEmbedding
@@ -126,12 +121,6 @@ function hembed(G::SimpleGraph, method::Symbol = :circular)
     end
     cache_save(G,:HyperbolicGraphEmbedding,X)
 end
-#
-# #graphs already embedded in SimpleGraphs, conversion to hyperbolic drawing
-# function convertEmbed(G::SimpleGraph)
-#     X = _convert(G)
-#     cache_save(G,:HyperbolicGraphEmbedding,X)
-# end
 
 """
 `hdraw(G)` draws the graph `G` in its current hyperoblic embedding
@@ -155,7 +144,7 @@ function hdraw(G::SimpleGraph)
         set_radius(A,2)
         draw(A)
     end
-    draw(HPlane())
+    # draw(HPlane()) # let the user decide to show the line at infinity
     finish()
 end
 
