@@ -6,7 +6,6 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
     # Initial layout is random in the unit circle
     locs_r = rand(N)
     angs = [2*pi*t/N for t=0:N-1]
-    d_theta = 2*pi/N
 
     # The optimal distance bewteen vertices
     K = C * sqrt(4.0 / N)
@@ -37,6 +36,7 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
                 #  / |          cos θ = d_x/d = fx/F
                 # /---          -> fx = F*d_x/d
                 # dx fx
+                d_theta = abs(angs(i) - angs(j))
                 force_vec += F_d*d * cos(d_theta)
 
             end
