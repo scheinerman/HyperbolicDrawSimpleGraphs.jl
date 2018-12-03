@@ -3,30 +3,26 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
     size(adj_matrix, 1) != size(adj_matrix, 2) && error("Adj. matrix must be square.")
     N = size(adj_matrix, 1)
 
-    # Initial layout is random on the square [-1,+1]^2
-    locs_x = 2*rand(N) .- 1.0
-    locs_y = 2*rand(N) .- 1.0
+    # Initial layout is random in the unit circle
+    locs_r = rand(N))
+    angs = [2*pi*t/n for t=0:n-1]
 
     # The optimal distance bewteen vertices
     K = C * sqrt(4.0 / N)
 
     # Store forces and apply at end of iteration all at once
-    force_x = zeros(N)
-    force_y = zeros(N)
+    force = zeros(N)
 
     # Iterate MAXITER times
     @inbounds for iter = 1:MAXITER
         # Calculate forces
         for i = 1:N
-            force_vec_x = 0.0
-            force_vec_y = 0.0
+            force_vec = 0.0
             for j = 1:N
                 i == j && continue
-                (r,theta) = polar(locs_x[i],locs_y[i])
-                P = HPoint(r,theta)
-                (r,theta) = polar(locs_x[j],locs_y[j])
-                Q = HPoint(r,theta)
-                d   = dist(P,Q)
+                P = HPoint(locs_r[i],angs[i])
+                Q = HPoint(locs_r[j],angs[j])
+                d = dist(P,Q)
                 if adj_matrix[i,j] != zero(eltype(adj_matrix)) || adj_matrix[j,i] != zero(eltype(adj_matrix))
                     # F = d^2 / K - K^2 / d
                     F_d = d / K - K^2 / d^2
@@ -40,33 +36,27 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
                 #  / |          cos θ = d_x/d = fx/F
                 # /---          -> fx = F*d_x/d
                 # dx fx
-                force_vec_x += F_d*d_x
-                force_vec_y += F_d*d_y
+                force_vec += F_d*d
+
             end
-            force_x[i] = force_vec_x
-            force_y[i] = force_vec_y
+            force[i] = force_vec
         end
         # Cool down
         TEMP = INITTEMP / iter
         # Now apply them, but limit to temperature
         for i = 1:N
-            force_mag  = sqrt(force_x[i]^2 + force_y[i]^2)
+            force_mag  = force[i]
             scale      = min(force_mag, TEMP)/force_mag
-            locs_x[i] += force_x[i] * scale
-            #locs_x[i]  = max(-1.0, min(locs_x[i], +1.0))
-            locs_y[i] += force_y[i] * scale
-            #locs_y[i]  = max(-1.0, min(locs_y[i], +1.0))
+            locs_r[i] += force_r[i] * scale
         end
     end
 
-    # Scale to unit square
-    min_x, max_x = minimum(locs_x), maximum(locs_x)
-    min_y, max_y = minimum(locs_y), maximum(locs_y)
+    # Scale to unit circle
+    min_r, max_r = minimum(locs_r), maximum(locs_r)
     function scaler(z, a, b)
         2.0*((z - a)/(b - a)) - 1.0
     end
-    locs_x = map(z -> scaler(z, min_x, max_x), locs_x)
-    locs_y = map(z -> scaler(z, min_y, max_y), locs_y)
+    locs_r = map(z -> scaler(z, min_r, max_r), locs_r)
 
-    return locs_x,locs_y
+    return locs_r
 end
