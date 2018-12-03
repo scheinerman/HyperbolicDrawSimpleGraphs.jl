@@ -5,7 +5,7 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
 
     # Initial layout is random in the unit circle
     locs_r = rand(N)
-    angs = [2*pi*t/n for t=0:n-1]
+    angs = [2*pi*t/N for t=0:N-1]
 
     # The optimal distance bewteen vertices
     K = C * sqrt(4.0 / N)
