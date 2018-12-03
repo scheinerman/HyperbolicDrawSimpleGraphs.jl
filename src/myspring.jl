@@ -55,10 +55,10 @@ function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEM
     # Scale to unit circle
     min_r, max_r = minimum(locs_r), maximum(locs_r)
     if max_r > 1
-        max_r = 1
+        max_r = 0.99
     end
     if min_r < -1
-        min_r = -1
+        min_r = -0.99
     end
     function scaler(z, a, b)
         2.0*((z - a)/(b - a)) - 1.0
