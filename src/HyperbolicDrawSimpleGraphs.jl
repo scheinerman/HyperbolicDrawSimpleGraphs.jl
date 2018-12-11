@@ -90,7 +90,7 @@ function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     for v in G.V
         xy = X.locs[v]
         (r,theta) = polar(xy)
-        locs[i] = r
+        locs_r[i] = r
         angs[i] = theta
         i = i + 1
     end
