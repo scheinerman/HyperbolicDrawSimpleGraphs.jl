@@ -83,10 +83,20 @@ iterations, use `spring!(X,nits)`.
 function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     GG = deepcopy(G)
     embed(GG,:spring)
+    X = h_convert(G)
+    locs_r = Array{Float64}
+    angs = Array{Float64}
+    X = cache_recall(G,:HyperbolicGraphEmbedding)
+    for v in G.V
+        xy = X.locs[v]
+        (r,theta) = polar(xy[1],xy[2])
+        push!(locs_r, r)
+        push!(angs, theta)
+    end
     n = NV(G)
     A,vv = private_adj(G)
 
-    locs_r, angs = h_layout_spring_adj(GG,A,MAXITER=nits)
+    locs_r, angs = h_layout_spring_adj(locs_r,angs,A,MAXITER=nits)
 
     d = Dict{Any,HPoint}()
     for i = 1:n

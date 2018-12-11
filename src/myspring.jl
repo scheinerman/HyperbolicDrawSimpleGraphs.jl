@@ -1,18 +1,7 @@
-function h_layout_spring_adj(G::SimpleGraph,adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
+function h_layout_spring_adj(locs_r::Array{Float64}, angs::Array{Float64}, adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
 
     size(adj_matrix, 1) != size(adj_matrix, 2) && error("Adj. matrix must be square.")
     N = size(adj_matrix, 1)
-
-    # Initial layout is random in the unit circle
-    locs_r = Array{Float64}
-    angs = Array{Float64}
-    X = cache_recall(G,:HyperbolicGraphEmbedding)
-    for v in G.V
-        xy = X.locs[v]
-        (r,theta) = polar(xy[1],xy[2])
-        push!(locs_r, r)
-        push!(angs, theta)
-    end
 
 
     # The optimal distance bewteen vertices
