@@ -10,6 +10,10 @@ function h_layout_spring_adj(locs_r::Array{Float64,1}, angs::Array{Float64,1}, a
     # Store forces and apply at end of iteration all at once
     force = zeros(N)
 
+    function scaler(z, a, b)
+        2.0*((z - a)/(b - a)) - 1.0
+    end
+
     # Iterate MAXITER times
     @inbounds for iter = 1:MAXITER
         # Calculate forces
@@ -47,20 +51,10 @@ function h_layout_spring_adj(locs_r::Array{Float64,1}, angs::Array{Float64,1}, a
             scale      = min(force_mag, TEMP)/force_mag
             locs_r[i] += force[i] * scale
         end
+        # Scale to unit circle each time
+        min_r, max_r = minimum(locs_r), maximum(locs_r)
+        locs_r = map(z -> scaler(z, min_r, max_r), locs_r)
     end
-
-    # Scale to unit circle
-    min_r, max_r = minimum(locs_r), maximum(locs_r)
-    if max_r > 1
-        max_r = 0.9
-    end
-    if min_r < -1
-        min_r = -0.9
-    end
-    function scaler(z, a, b)
-        2.0*((z - a)/(b - a)) - 1.0
-    end
-    locs_r = map(z -> scaler(z, min_r, max_r), locs_r)
 
     return locs_r, angs
 end
