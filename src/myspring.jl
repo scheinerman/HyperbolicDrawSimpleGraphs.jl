@@ -6,8 +6,9 @@ function h_layout_spring_adj(G::SimpleGraph,adj_matrix::Array{T,2}; C=2.0, MAXIT
     # Initial layout is random in the unit circle
     locs_r = Array{Float64}
     angs = Array{Float64}
+    X = cache_recall(G,:HyperbolicGraphEmbedding)
     for v in G.V
-        xy = loc[v]
+        xy = X.locs[v]
         (r,theta) = polar(xy[1],xy[2])
         push!(locs_r, r)
         push!(angs, theta)
