@@ -86,7 +86,6 @@ function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     X = h_convert(G)
     locs_r = Array{Float64}
     angs = Array{Float64}
-    X = cache_recall(G,:HyperbolicGraphEmbedding)
     for v in G.V
         xy = X.locs[v]
         (r,theta) = polar(xy[1],xy[2])
