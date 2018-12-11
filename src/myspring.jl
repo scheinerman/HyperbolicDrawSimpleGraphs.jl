@@ -1,11 +1,18 @@
-function h_layout_spring_adj(adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
+function h_layout_spring_adj(G::SimpleGraph,adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
 
     size(adj_matrix, 1) != size(adj_matrix, 2) && error("Adj. matrix must be square.")
     N = size(adj_matrix, 1)
 
     # Initial layout is random in the unit circle
-    locs_r = randn(N)
-    angs = [2*pi*t/N for t=0:N-1]
+    locs_r = Array{Float64}
+    angs = Array{Float64}
+    for v in G.V
+        xy = loc[v]
+        (r,theta) = polar(xy[1],xy[2])
+        push!(locs_r, r)
+        push!(angs, theta)
+    end
+
 
     # The optimal distance bewteen vertices
     K = C * sqrt(4.0 / N)

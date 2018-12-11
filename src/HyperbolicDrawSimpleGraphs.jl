@@ -81,10 +81,12 @@ iterations (100) of that algorithm. To change the number of
 iterations, use `spring!(X,nits)`.
 """
 function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
+    GG = deepcopy(G)
+    embed(GG,:spring)
     n = NV(G)
     A,vv = private_adj(G)
 
-    locs_r, angs = h_layout_spring_adj(A,MAXITER=nits)
+    locs_r, angs = h_layout_spring_adj(GG,A,MAXITER=nits)
 
     d = Dict{Any,HPoint}()
     for i = 1:n
