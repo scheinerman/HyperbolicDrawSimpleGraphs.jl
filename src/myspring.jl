@@ -1,4 +1,4 @@
-function h_layout_spring_adj(locs_r::Array{Any,1}, angs::Array{Any,1}, adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
+function h_layout_spring_adj(locs_r::Array{Float64,1}, angs::Array{Float64,1}, adj_matrix::Array{T,2}; C=2.0, MAXITER=100, INITTEMP=2.0) where T
 
     size(adj_matrix, 1) != size(adj_matrix, 2) && error("Adj. matrix must be square.")
     N = size(adj_matrix, 1)

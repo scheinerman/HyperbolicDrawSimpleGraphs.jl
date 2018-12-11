@@ -84,13 +84,15 @@ function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     GG = deepcopy(G)
     embed(GG,:spring)
     X = h_convert(GG)
-    locs_r = Array{Any,1}
-    angs = Array{Any,1}
+    locs_r = Array{Float64,1}
+    angs = Array{Float64,1}
+    i = 1
     for v in G.V
         xy = X.locs[v]
         (r,theta) = polar(xy)
-        push!(locs_r, r)
-        push!(angs, theta)
+        locs[i] = r
+        angs[i] = theta
+        i = i + 1
     end
     n = NV(G)
     A,vv = private_adj(G)
