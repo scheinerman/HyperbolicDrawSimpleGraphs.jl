@@ -84,8 +84,9 @@ function h_spring(G::SimpleGraph, nits::Int=100)::HyperbolicGraphEmbedding
     GG = deepcopy(G)
     embed(GG,:spring)
     X = h_convert(GG)
-    locs_r = Array{Float64,1}
-    angs = Array{Float64,1}
+    n = NV(GG)
+    locs_r = zeros(n)
+    angs = zeros(n)
     i = 1
     for v in G.V
         xy = X.locs[v]
