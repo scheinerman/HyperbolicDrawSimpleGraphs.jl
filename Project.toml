@@ -1,0 +1,16 @@
+name = "HyperbolicDrawSimpleGraphs"
+uuid = "431d6896-3409-5f74-b034-90378c342484"
+
+[deps]
+HyperbolicPlane = "0111da9b-5c18-507b-82d1-0701aba3485a"
+SimpleDrawing = "d78a06e8-ae74-583c-9a07-0d6572347000"
+SimpleGraphs = "55797a34-41de-5266-9ec1-32ac4eb504d3"
+
+[compat]
+julia = "≥ 0.7.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
