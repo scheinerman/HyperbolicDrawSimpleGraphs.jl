@@ -1,5 +1,8 @@
 # HyperbolicDrawSimpleGraphs
 
+[![Build Status](https://travis-ci.com/scheinerman/HyperbolicDrawSimpleGraphs.jl.svg?branch=master)](https://travis-ci.com/scheinerman/HyperbolicDrawSimpleGraphs.jl)
+
+
 This is a module for drawing graphs in the hyperbolic plane. It relies
 on the `SimpleGraphs` and `HyperbolicPlane` modules. The modules rely,
 in turn, on `Plots` and `SimpleDrawing`
